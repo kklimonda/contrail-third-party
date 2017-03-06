@@ -49,6 +49,7 @@ def getTarDestination(tgzfile, compress_flag):
     cmd = subprocess.Popen(['tar', compress_flag + 'tf', tgzfile],
                            stdout=subprocess.PIPE)
     (output, _) = cmd.communicate()
+    print output
     (first, _) = output.split('\n', 1)
     fields = first.split()
     return fields[0]
@@ -199,6 +200,8 @@ def ProcessPackage(pkg):
             dest = getTarDestination(ccfile, 'z')
         elif pkg.format == 'tbz':
             dest = getTarDestination(ccfile, 'j')
+        elif pkg.format == 'txz':
+            dest = getTarDestination(ccfile, 'J')
         elif pkg.format == 'zip':
             dest = getZipDestination(ccfile)
         elif pkg.format == 'npm':
@@ -231,6 +234,8 @@ def ProcessPackage(pkg):
         cmd = ['tar', 'zxvf', ccfile]
     elif pkg.format == 'tbz':
         cmd = ['tar', 'jxvf', ccfile]
+    elif pkg.format == 'txz':
+        cmd = ['tar', 'Jxvf', ccfile]
     elif pkg.format == 'zip':
         cmd = ['unzip', '-o', ccfile]
     elif pkg.format == 'npm':
